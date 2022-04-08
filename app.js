@@ -12,21 +12,22 @@ io.on("connection", (client) => {
     };
     users[client.id] = user;
     io.emit("connected", user);
+    io.emit("message", { text: `knock knock ${username}` });
     io.emit("users", Object.values(users));
   });
 
   client.on("send", (message) => {
     io.emit("message", {
       text: message,
-      date: new Date().toISOString(),
       user: users[client.id],
     });
   });
 
   client.on("disconnect", () => {
-    const username = users[client.id];
+    const username = users[client.id].name;
     delete users[client.id];
     io.emit("disconnected", client.id);
+    io.emit("message", { text: `matrix has ${username}` });
   });
 });
 
