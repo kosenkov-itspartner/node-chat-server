@@ -27,7 +27,9 @@ io.on("connection", (client) => {
     const username = users[client.id]?.name;
     delete users[client.id];
     io.emit("disconnected", client.id);
-    io.emit("message", { text: `matrix has ${username}` });
+    if (username) {
+      io.emit("message", { text: `matrix has ${username}` });
+    }
   });
 });
 
